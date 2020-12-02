@@ -7,6 +7,8 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 
+import "../css/style.css";
+
 // you can assign longer types w/ generics (this bit <>) to type style vars to save on boilerplate
 // types must reference pre-existing types
 type FormElem = React.FormEvent<HTMLFormElement>;
@@ -20,7 +22,8 @@ interface ITodo {
 
 const Todo = () => {
   const [value, setValue] = useState<string>("");
-  const [todos, setTodos] = useState<ITodo[]>([]); //have to pass arr in the type to make it array of objects
+  const [todos, setTodos] = useState<ITodo[]>([]); //have to pass arr in the type to make it array of iTodos
+  const [index, setInEdit] = useState<any>(false);
 
   const handleSubmit = (e: FormElem): void => {
     e.preventDefault();
@@ -29,8 +32,14 @@ const Todo = () => {
   };
 
   const addTodo = (text: string): void => {
-    const newTodos: ITodo[] = [...todos, { text: text, complete: false }];
+    let newTodos: ITodo[] = todos.slice();
+    if (index !== false) {
+      newTodos[index].text = text;
+    } else {
+      newTodos = [...todos, { text: text, complete: false }];
+    }
     setTodos(newTodos);
+    setInEdit(false);
   };
 
   const completeTodo = (index: number): void => {
@@ -39,19 +48,25 @@ const Todo = () => {
     setTodos(newTodos);
   };
 
+  const editTodo = (text: string, i: number): void => {
+    setValue(text);
+    setInEdit(i);
+  };
+
+  const deleteTodo = (index: number): void => {
+    const newTodos: ITodo[] = todos.slice();
+    newTodos.splice(index, 1);
+    setTodos(newTodos);
+  };
+
   return (
     <Container maxWidth='sm'>
-      <Typography variant='h2' style={{ textAlign: "center" }}>
-        Todo List
-      </Typography>
-      <section style={{ marginTop: "4rem" }}>
+      <Typography variant='h2'>Todo List</Typography>
+      <section>
         {todos.length ? (
           <List>
             {todos.map((todo, i) => (
-              <ListItem
-                key={i}
-                style={{ display: "flex", justifyContent: "space-between" }}
-              >
+              <ListItem key={i}>
                 <ListItemText
                   style={{
                     textDecoration: todo.complete ? "line-through" : "initial",
@@ -61,11 +76,28 @@ const Todo = () => {
                 <Button
                   color='secondary'
                   type='button'
+                  className='button'
                   onClick={() => completeTodo(i)}
                 >
                   <i
                     className={`fas fa-${todo.complete ? "times" : "check"}`}
                   ></i>
+                </Button>
+                <Button
+                  color='primary'
+                  type='button'
+                  className='button'
+                  onClick={() => editTodo(todo.text, i)}
+                >
+                  <i className='fa fa-pencil'></i>
+                </Button>
+                <Button
+                  color='default'
+                  type='button'
+                  className='button'
+                  onClick={() => deleteTodo(i)}
+                >
+                  <i className='fas fa-trash'></i>
                 </Button>
               </ListItem>
             ))}

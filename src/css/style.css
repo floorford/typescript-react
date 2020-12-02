@@ -1,0 +1,17 @@
+.button {
+  min-width: 40px !important;
+}
+
+h2 {
+  text-align: center;
+  color: #f50057;
+}
+
+section {
+  margin-top: 4rem;
+}
+
+li {
+  display: flex;
+  justify-content: space-between;
+}
