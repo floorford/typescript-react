@@ -1,27 +1,22 @@
-import React, { Component } from "react";
+import React, { Fragment, useState } from "react";
 
-class App extends Component {
-  sum(a: number, b: number): number {
-    return a + b;
-  }
+const App = () => {
+  const [value, setValue] = useState<string>("");
 
-  render() {
-    return (
-      <div className='App'>
-        <header className='App-header'>
-          <p>{this.sum(2, 3)}</p>
-          <a
-            className='App-link'
-            href='https://reactjs.org'
-            target='_blank'
-            rel='noopener noreferrer'
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
-  }
-}
+  return (
+    <Fragment>
+      <h1>Todo List</h1>
+      <form>
+        <input
+          type='text'
+          required
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+        />
+        <button type='submit'>Add Todo</button>
+      </form>
+    </Fragment>
+  );
+};
 
 export default App;
