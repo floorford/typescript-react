@@ -1,4 +1,11 @@
-import React, { Fragment, useState } from "react";
+import React, { useState } from "react";
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+import Container from "@material-ui/core/Container";
+import Typography from "@material-ui/core/Typography";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
 
 // you can assign longer types w/ generics (this bit <>) to type style vars to save on boilerplate
 // types must reference pre-existing types
@@ -26,30 +33,62 @@ const Todo = () => {
     setTodos(newTodos);
   };
 
+  const completeTodo = (index: number): void => {
+    const newTodos: ITodo[] = todos.slice();
+    newTodos[index].complete = !newTodos[index].complete;
+    setTodos(newTodos);
+  };
+
   return (
-    <Fragment>
-      <h1>Todo List</h1>
-      <section>
+    <Container maxWidth='sm'>
+      <Typography variant='h2' style={{ textAlign: "center" }}>
+        Todo List
+      </Typography>
+      <section style={{ marginTop: "4rem" }}>
         {todos.length ? (
-          <ul>
+          <List>
             {todos.map((todo, i) => (
-              <li key={i}>{todo.text}</li>
+              <ListItem
+                key={i}
+                style={{ display: "flex", justifyContent: "space-between" }}
+              >
+                <ListItemText
+                  style={{
+                    textDecoration: todo.complete ? "line-through" : "initial",
+                  }}
+                  primary={todo.text}
+                />
+                <Button
+                  color='secondary'
+                  type='button'
+                  onClick={() => completeTodo(i)}
+                >
+                  <i
+                    className={`fas fa-${todo.complete ? "times" : "check"}`}
+                  ></i>
+                </Button>
+              </ListItem>
             ))}
-          </ul>
+          </List>
         ) : (
-          <p>You have nothing to do - woohoo!</p>
+          <Typography>You have nothing to do - woohoo!</Typography>
         )}
       </section>
-      <form onSubmit={handleSubmit}>
-        <input
+      <form onSubmit={handleSubmit} style={{ display: "flex" }}>
+        <TextField
           type='text'
+          style={{ width: "75%" }}
           required
           value={value}
           onChange={(e) => setValue(e.target.value)}
+          id='standard-basic'
+          label='Todo'
         />
-        <button type='submit'>Add Todo</button>
+        <Button type='submit' variant='contained' color='secondary'>
+          Add To List
+        </Button>
       </form>
-    </Fragment>
+    </Container>
   );
 };
 
