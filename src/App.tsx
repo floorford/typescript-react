@@ -1,14 +1,21 @@
 import React from "react";
+import { Link } from "@reach/router";
 
-import Todo from "./components/Todo";
-import RickMorty from "./components/RickMorty";
+import Typography from "@material-ui/core/Typography";
 
-const App = () => {
+const App = (props: any): JSX.Element => {
   return (
-    <>
-      <Todo />
-      <RickMorty />
-    </>
+    <main>
+      <nav>
+        <Typography>
+          <Link to='/todo'>Todo</Link>
+        </Typography>
+        <Typography>
+          <Link to='/rickandmorty'>Rick and Morty App</Link>
+        </Typography>
+      </nav>
+      {props.children}
+    </main>
   );
 };
 

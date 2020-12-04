@@ -1,9 +1,10 @@
 import React from "react";
 import Typography from "@material-ui/core/Typography";
+import { Link } from "@reach/router";
 
 import { Store } from "../Store";
-import { url } from "../api";
-import { IEpisode, IAction } from "../interfaces";
+import { IEpisode } from "../interfaces";
+import { fetchDataAction, toggleFavAction } from "../Actions";
 
 import Episode from "./Episode";
 
@@ -12,40 +13,8 @@ const RickMorty = () => {
   const { state, dispatch } = React.useContext(Store);
 
   React.useEffect(() => {
-    !state.episodes.length && fetchDataAction();
+    !state.episodes.length && fetchDataAction(dispatch);
   });
-
-  const fetchDataAction = async () => {
-    const data = await fetch(url);
-    const json = await data.json();
-
-    return dispatch({
-      type: "FETCH_DATA",
-      payload: json._embedded.episodes,
-    });
-  };
-
-  const toggleFavAction = (episode: IEpisode): IAction => {
-    const episodeInFav = state.favourites.includes(episode);
-
-    let dispatchObj = {
-      type: "ADD_FAV",
-      payload: episode,
-    };
-
-    if (episodeInFav) {
-      const favWithoutEpisode = state.favourites.filter(
-        (ep: IEpisode) => ep.id !== episode.id
-      );
-
-      dispatchObj = {
-        type: "REMOVE_FAV",
-        payload: favWithoutEpisode,
-      };
-    }
-
-    return dispatch(dispatchObj);
-  };
 
   return (
     <section>
@@ -54,12 +23,20 @@ const RickMorty = () => {
         Pick your favourite episode!
       </Typography>
 
+      <nav>
+        <Typography>
+          <Link to='/favourites'>See My Favourites</Link>
+        </Typography>
+      </nav>
       <section className='flex-container'>
         {state
           ? state.episodes.map((episode: IEpisode) => (
               <Episode
+                key={episode.id}
                 episode={episode}
-                toggleFavAction={toggleFavAction}
+                toggleFavAction={() =>
+                  toggleFavAction(state, dispatch, episode)
+                }
                 favourites={state.favourites}
               />
             ))

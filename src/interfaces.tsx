@@ -16,7 +16,7 @@ export interface IEpisode {
 // custom type for state
 export interface IState {
   episodes: Array<IEpisode>;
-  favourites: Array<any>;
+  favourites: Array<IEpisode>;
 }
 
 export interface IAction {

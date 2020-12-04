@@ -1,5 +1,5 @@
 import React from "react";
-import { IState, IAction, IEpisode } from "./interfaces";
+import { IState, IAction } from "./interfaces";
 
 // default value for store
 const initialState: IState = {

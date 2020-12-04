@@ -13,7 +13,7 @@ const Episode = (props: any): JSX.Element => {
   const regex = /(<([^>]+)>)/gi;
 
   return (
-    <Card className='card' key={episode.id}>
+    <Card className='card'>
       <CardMedia
         style={{ height: 140 }}
         image={episode.image.medium}
