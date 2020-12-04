@@ -1,15 +1,14 @@
 import React from "react";
 import Typography from "@material-ui/core/Typography";
-import Card from "@material-ui/core/Card";
-import CardHeader from "@material-ui/core/CardHeader";
-import CardMedia from "@material-ui/core/CardMedia";
-import CardContent from "@material-ui/core/CardContent";
 
 import { Store } from "../Store";
 import { url } from "../api";
+import { IEpisode, IAction } from "../interfaces";
+
+import Episode from "./Episode";
 
 const RickMorty = () => {
-  //[value, function to change value]
+  // [value, function to change value]
   const { state, dispatch } = React.useContext(Store);
 
   React.useEffect(() => {
@@ -26,7 +25,27 @@ const RickMorty = () => {
     });
   };
 
-  const regex = /(<([^>]+)>)/gi;
+  const toggleFavAction = (episode: IEpisode): IAction => {
+    const episodeInFav = state.favourites.includes(episode);
+
+    let dispatchObj = {
+      type: "ADD_FAV",
+      payload: episode,
+    };
+
+    if (episodeInFav) {
+      const favWithoutEpisode = state.favourites.filter(
+        (ep: IEpisode) => ep.id !== episode.id
+      );
+
+      dispatchObj = {
+        type: "REMOVE_FAV",
+        payload: favWithoutEpisode,
+      };
+    }
+
+    return dispatch(dispatchObj);
+  };
 
   return (
     <section>
@@ -37,45 +56,14 @@ const RickMorty = () => {
 
       <section className='flex-container'>
         {state
-          ? state.episodes.map((episode: any) => (
-              <Card
-                style={{
-                  width: 345,
-                  border: "1px solid grey",
-                  margin: "1rem",
-                }}
-                key={episode.id}
-              >
-                <CardMedia
-                  style={{ height: 140 }}
-                  image={episode.image.medium}
-                  title={episode.name}
-                />
-                <CardHeader title={episode.name} subheader={episode.airdate} />
-                <CardContent>
-                  <Typography
-                    variant='body2'
-                    color='textSecondary'
-                    component='p'
-                  >
-                    Season: {episode.season}
-                  </Typography>
-                  <Typography
-                    variant='body2'
-                    color='textSecondary'
-                    component='p'
-                  >
-                    Number: {episode.number}
-                  </Typography>
-                  <Typography variant='body2' component='p'>
-                    {episode.summary
-                      ? episode.summary.replace(regex, "")
-                      : null}
-                  </Typography>
-                </CardContent>
-              </Card>
+          ? state.episodes.map((episode: IEpisode) => (
+              <Episode
+                episode={episode}
+                toggleFavAction={toggleFavAction}
+                favourites={state.favourites}
+              />
             ))
-          : null}
+          : "Loading..."}
       </section>
     </section>
   );

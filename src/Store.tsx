@@ -1,16 +1,5 @@
 import React from "react";
-
-// custom type for state
-interface IState {
-  episodes: [];
-  favourites: [];
-}
-
-// custom type for actions
-interface IAction {
-  type: string;
-  payload: any;
-}
+import { IState, IAction, IEpisode } from "./interfaces";
 
 // default value for store
 const initialState: IState = {
@@ -24,6 +13,10 @@ export const reducer = (state: IState, action: IAction): IState => {
   switch (action.type) {
     case "FETCH_DATA":
       return { ...state, episodes: action.payload };
+    case "ADD_FAV":
+      return { ...state, favourites: [...state.favourites, action.payload] };
+    case "REMOVE_FAV":
+      return { ...state, favourites: action.payload };
     default:
       return state;
   }
