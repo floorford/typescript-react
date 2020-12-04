@@ -1,5 +1,5 @@
 import { url } from "./api";
-import { IEpisode, IAction, IState } from "./interfaces";
+import { IEpisode, IState } from "./interfaces";
 
 export const fetchDataAction = async (dispatch: any) => {
   const data = await fetch(url);
@@ -15,7 +15,7 @@ export const toggleFavAction = (
   state: IState,
   dispatch: any,
   episode: IEpisode | any
-): IAction => {
+) => {
   const episodeInFav = state.favourites.includes(episode);
 
   let dispatchObj = {
