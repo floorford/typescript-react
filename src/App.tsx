@@ -1,12 +1,13 @@
 import React from "react";
+
 import Todo from "./components/Todo";
-import ContextDemo from "./components/ContextDemo";
+import RickMorty from "./components/RickMorty";
 
 const App = () => {
   return (
     <>
       <Todo />
-      <ContextDemo />
+      <RickMorty />
     </>
   );
 };

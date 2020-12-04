@@ -59,7 +59,7 @@ const Todo = () => {
 
   return (
     <Container maxWidth='sm'>
-      <Typography variant='h2'>Todo List</Typography>
+      <Typography variant='h3'>Todo List</Typography>
       <section>
         {todos.length ? (
           <List>
